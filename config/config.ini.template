@@ -1,0 +1,11 @@
+[paths]
+log_file = ~/thinline-radio/tone-keyword-debug.log
+stats_log = ~/.thinline-log-tools/transcription_cost.log
+
+[cleanup]
+retention_hours = 36
+
+[model]
+name = google-stt-standard
+cost_per_minute = 0.024
+words_per_minute = 150
