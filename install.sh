@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 
 echo "ThinLine Log Tools Installer"
 echo "----------------------------"
 
 INSTALL_DIR="$HOME/.thinline-log-tools"
 
-read -p "Debug log path [~/thinline-radio/tone-keyword-debug.log]: " LOG_FILE
-LOG_FILE=${LOG_FILE:-"$HOME/thinline-radio/tone-keyword-debug.log"}
+DEFAULT_LOG="$SCRIPT_DIR/logs/transcription_cost.log"
+
+read -p "Cost output log [$DEFAULT_LOG]: " STATS_LOG
+STATS_LOG=${STATS_LOG:-"$DEFAULT_LOG"}
+
+mkdir -p "$(dirname "$STATS_LOG")"
 
 read -p "Cost output log [~/.thinline-log-tools/transcription_cost.log]: " STATS_LOG
 STATS_LOG=${STATS_LOG:-"$INSTALL_DIR/transcription_cost.log"}
@@ -22,7 +28,12 @@ read -p "Words per minute [150]: " WPM
 WPM=${WPM:-"150"}
 
 mkdir -p "$INSTALL_DIR/scripts"
-cp scripts/*.py "$INSTALL_DIR/scripts/"
+
+cp scripts/*.py "$INSTALL_DIR/scripts/" || {
+  echo "ERROR: scripts/*.py not found. Run installer from project root."
+  exit 1
+}
+
 
 cat > "$INSTALL_DIR/config.ini" <<EOF2
 [paths]
